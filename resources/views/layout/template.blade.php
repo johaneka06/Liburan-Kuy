@@ -21,13 +21,18 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-item nav-link active" href="{{ url('/pesawat') }}">Pesawat</a>
+          <a class="nav-item nav-link" href="{{ url('/pesawat') }}">Pesawat</a>
           <a class="nav-item nav-link" href="{{ url('/hotel') }}">Hotel</a>
           <a class="nav-item nav-link" href="{{ url('/kereta') }}">Kereta</a>
         </div>
         <div class="ml-auto">
-          <a href="/login" class="btn btn-light">Login</a>
-          <a href="/daftar" class="btn btn-primary">Daftar</a>
+          @if(auth()->user() == null)
+            <a href="/login" class="btn btn-light">Login</a>
+            <a href="/daftar" class="btn btn-primary">Daftar</a>
+          @elseif(auth()->user() != null)
+            <a href="/profile" class="btn btn-light">Profile</a>
+            <a href="/logout" class="btn btn-primary">Logout</a>
+          @endif
         </div>
       </div>
     </nav>

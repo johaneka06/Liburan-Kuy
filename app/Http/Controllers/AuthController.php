@@ -3,27 +3,86 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
 {
     public function getLogin()
     {
-        return view('user/login');
+        return view('auth/login');
     }
 
     public function getRegister()
     {
-        return view('user/register');
+        return view('auth/register');
     }
 
     public function postLogin(Request $request)
     {
-        dd($request);
+        if(DB::table('users')->where('email', '=', $request->uniqeIdent)->exists())
+        {
+            return view('auth/password', ['ident' => $request->uniqeIdent]);
+        }
+        else if(DB::table('users')->where('phone_no', '=', $request->uniqeIdent)->exists())
+        {
+            return view('auth/password', ['ident' => $request->uniqeIdent]);
+        }
+
+        Alert::error('No Match', 'No record match with your identifier');
+        return redirect('/login');
+    }
+
+    public function postPassword(Request $request)
+    {
+        //dd($request->all());
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password]) || Auth::attempt(['phone_no' => $request->email, 'password' => $request->password]))
+        {
+            $user = DB::table('users')
+                ->where('email', '=', $request->email)
+                ->orWhere('phone_no', '=', $request->email)
+                ->first();
+
+            return view('index', ['name' => $user->name]);
+        }
+        Alert::error('Wrong credentials', 'Email / Phone No / Password doesn\'t match with the database');
+        return redirect('/login');
     }
 
     public function postRegister(Request $request)
     {
-        dd($request->email);
+
+        if(DB::table('users')->where('email', '=', $request->email)->exists())
+        {
+            Alert::info('Email Found', 'Your email has been found and match with the database');
+            return redirect('/login');
+        }
+        else if(DB::table('users')->where('phone_no', '=', $request->phone_no)->exists())
+        {
+            Alert::info('Phone Number Found', 'Your phone no has been found and match with the database');
+            return redirect('/login');
+        }
+
+        $user = new \App\User;
+        $user->name = $request->fName;
+        $user->last_name = $request->lName;
+        $user->phone_no = $request->nomorHp;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->remember_token = Str::random(10);
+        $user->save();
+
+        Auth::attempt($request->only('email', 'password'));
+        toast('Your account has been created successfully','success');
+        return redirect('/');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/');
     }
 }
 
