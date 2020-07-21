@@ -30,8 +30,8 @@
             <a href="/login" class="btn btn-light">Login</a>
             <a href="/daftar" class="btn btn-primary">Daftar</a>
           @elseif(auth()->user() != null)
-            <a href="/profile" class="btn btn-light">Profile</a>
-            <a href="/logout" class="btn btn-primary">Logout</a>
+            <a href="{{ url('/user/profile') }}" class="btn btn-light">Profile</a>
+            <a href="{{ url('/logout') }}" class="btn btn-primary">Logout</a>
           @endif
         </div>
       </div>

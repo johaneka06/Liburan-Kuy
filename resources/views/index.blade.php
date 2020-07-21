@@ -1,6 +1,6 @@
 @extends('layout/template')
 
-@section('title', 'Welcome')
+@section('title', 'Liburan Kuy - Cari Tiket Liburanmu Disini!')
 
 @section('container')
 <div class="container mt-3">
@@ -35,17 +35,55 @@
   </div>
   <!-- End carousel image slider -->
   <div class="shadow-lg p-3 mb-5 mt-5 bg-white" style="border-radius: 25px;">
-    <div class="container ml-5">
-      <h3>Hei, {{$name}}!</h3>
-      <h2>Mau Liburan Kemana?</h2>
-      <p class="mt-4">Buruan cari tiket pesawatmu disini!</p>
+    <div class="container ml-2">
+      <div class="border-bottom">
+        <h3>Hei, {{$name}}!</h3>
+        <h2>Mau Liburan Kemana?</h2>
+        <p class="mt-4">Buruan cari tiket pesawatmu disini!</p>
+      </div>
+      <input type="checkbox" id="roundTripChck" value="checked" onclick="display()">
+      <label for="roundTripChck">Pulang - Pergi</label>
       <form action="flight" method="POST">
         {{ csrf_field() }}
-        <button type="submit" class="btn btn-primary" onclick="location.href='/flight';">Cari</button>
+        <div class="row mb-3">
+          <div class="col-sm-3 border-right">
+            <p style="color: gray;">Dari</p>
+            <input type="text" class="form-control" name="dep">
+          </div>
+          <div class="col-sm-3 border-right">
+            <p style="color: gray;">Ke</p>
+            <input type="text" class="form-control" name="arr">
+          </div>
+          <div class="col-sm-2 border-right">
+            <p style="color: gray;">Berangkat</p>
+            <input type="date" class="form-control" name="depDate">
+          </div>
+          <div class="col-sm-2 border-right">
+            <p style="color: gray;">Pulang</p>
+            <input type="date" class="form-control" id="return" name="returnDate" disabled>
+          </div>
+          <div class="col-sm-2">
+            <p style="color: gray;">Penumpang</p>
+            <input type="number" class="form-control" name="paxCount" value="1" aria-valuemin="1" aria-valuemax="8">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Cari</button>
       </form>
       
     </div>
   </div>
 
 </div>
+
+<script type="text/javascript">
+  function display() {
+    var chckBox = document.getElementById("roundTripChck");
+    if(chckBox.checked == true) {
+      document.getElementById("return").removeAttribute("disabled");
+    } else {
+      document.getElementById("return").setAttribute("disabled", "");
+    }
+  }
+</script>
+
 @endsection

@@ -22,7 +22,10 @@ Route::get('/kereta', 'PagesController@train');
 
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/logout', 'AuthController@logout');
-    Route::get('/profile', 'PagesController@profile');
+    Route::get('/user/profile', 'PagesController@profile');
+    Route::get('/user/history', 'ProfileController@order');
+    Route::get('/user/point', 'ProfileController@point');
+    Route::get('/user/profile-list', 'ProfileController@profileMan');
 });
 
 Route::post('/login', 'AuthController@postLogin') -> name('postLogin');

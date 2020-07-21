@@ -45,7 +45,7 @@ class AuthController extends Controller
                 ->orWhere('phone_no', '=', $request->email)
                 ->first();
 
-            return view('index', ['name' => $user->name]);
+            return redirect('/');
         }
         Alert::error('Wrong credentials', 'Email / Phone No / Password doesn\'t match with the database');
         return redirect('/login');
