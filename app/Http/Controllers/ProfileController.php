@@ -92,5 +92,6 @@ class ProfileController extends Controller
         $obj_user->last_name = $request->lName;
         $obj_user->save();
         toast('Sukses mengubah data nama', 'success');
+        return redirect('/user/profile/settings');
     }
 }

@@ -17,6 +17,7 @@ class PagesController extends Controller
     public function plane()
     {
         $nama = "kamu";
+        if(Auth::user() != null) $nama = Auth::user()->name;
         Alert::error('Cannot Access', 'This Feature is Under Development Process');
         return view('index', ['name' => $nama]);
     }
@@ -24,6 +25,7 @@ class PagesController extends Controller
     public function hotel()
     {
         $nama = "kamu";
+        if(Auth::user() != null) $nama = Auth::user()->name;
         Alert::error('Cannot Access', 'This Feature is Under Development Process');
         return view('index', ['name' => $nama]);
     }
@@ -31,6 +33,7 @@ class PagesController extends Controller
     public function train()
     {
         $nama = "kamu";
+        if(Auth::user() != null) $nama = Auth::user()->name;
         Alert::error('Cannot Access', 'This Feature is Under Development Process');
         return view('index', ['name' => $nama]);
     }
