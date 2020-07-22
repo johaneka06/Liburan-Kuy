@@ -26,6 +26,10 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/user/history', 'ProfileController@order');
     Route::get('/user/point', 'ProfileController@point');
     Route::get('/user/profile-list', 'ProfileController@profileMan');
+    Route::get('/user/profile/settings', 'ProfileController@setting');
+    Route::post('/user/profile/settings/phoneNo', 'ProfileController@phoneNoChanges') -> name('putPhoneNo');
+    Route::post('/user/profile/settings/password', 'ProfileController@passwordChanges') -> name('putPassword');
+    Route::post('/user/profile/settings/data', 'ProfileController@dataChanges') -> name('putData');
 });
 
 Route::post('/login', 'AuthController@postLogin') -> name('postLogin');

@@ -38,7 +38,9 @@ class PagesController extends Controller
     public function profile()
     {
         $name = Auth::user()->name." ".Auth::user()->last_name;
-        return view('user/akun', ['name' => $name]);
+        $email = Auth::user()->email;
+        $phone_no = Auth::user()->phone_no;
+        return view('user/akun', ['name' => $name, 'email' => $email, 'phone_no' => $phone_no]);
     }
 }
 

@@ -11,7 +11,7 @@
 </div>
 
 <script type="text/javascript">
-  var element = document.getElementById("odrd");
+  var element = document.getElementById("ordr");
   element.classList.remove("bg-light");
   element.classList.add("active");
 </script>
