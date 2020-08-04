@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+use \Illuminate\Support\Carbon;
+use Ramsey\Uuid\Uuid;
 use \App\User;
+use \App\Profile_List;
+use \App\Transaction;
+use Illuminate\Support\Facades\Date;
 
 class ProfileController extends Controller
 {
@@ -22,8 +27,12 @@ class ProfileController extends Controller
     public function order()
     {
         $id = Auth::user()->id;
+        $items = Transaction::where([
+            ['user_id', '=', $id],
+            ['dep_date', '<>', Date::today()],
+        ])->get();
         $name = Auth::user()->name . " " . Auth::user()->last_name;
-        return view('user/order-hist', ['name' => $name]);
+        return view('user/order-hist', ['name' => $name, 'items' => $items]);
     }
 
     public function profileMan()
@@ -93,5 +102,70 @@ class ProfileController extends Controller
         $obj_user->save();
         toast('Sukses mengubah data nama', 'success');
         return redirect('/user/profile/settings');
+    }
+
+    public function retrieveProfile()
+    {
+        $user_id = Auth::User()->id;
+        $profiles = Profile_List::where('user_id', '=', $user_id)->orderBy('created_at')->get();
+        return view('user/profile-man', ['name' => Auth::User()->name." ".Auth::User()->last_name, 'profiles' => $profiles]);
+    }
+
+    public function getProfile($id)
+    {
+        $profile = Profile_List::where('id', '=', $id)->first();
+        return view('user/profile-editor', ['name' => Auth::User()->name." ".Auth::User()->last_name, 'profile' => $profile]);
+    }
+
+    public function updateProfile($id, Request $request)
+    {
+        $profile = Profile_List::where('id', '=', $id)->first();
+        $profile->name = $request->first;
+        $profile->last_name = $request->last;
+        $profile->email = $request->email;
+        $profile->phone_no = $request->hp;
+        $profile->updated_at = Carbon::now();
+        $profile->save();
+        toast('Sukses mengedit profile', 'success');
+        return redirect('/user/manage-profile');
+    }
+
+    public function addProfile(Request $request)
+    {
+        $newProfile = new Profile_List;
+        $newProfile->id = Uuid::uuid4();
+        $newProfile->user_id = Auth::user()->id;
+        $newProfile->name = $request->first;
+        $newProfile->last_name = $request->last;
+        $newProfile->phone_no = $request->phone;
+        $newProfile->email = $request->email;
+        $newProfile->save();
+        Alert::success('Sukses', 'Sukses menambahkan profil baru: '.$newProfile->name." ".$newProfile->last_name);
+        return redirect('/user/manage-profile');
+    }
+
+    public function getProfileData($id)
+    {
+        $deleted = Profile_List::where('id', '=', $id)->first();
+        return view('user/delete-profile', ['name' => Auth::user()->name." ".Auth::user()->last_name, 'deleted' => $deleted]);
+    }
+
+    public function deleteProfile($id)
+    {
+        $deleted = Profile_List::where('id', '=', $id)->first();
+        $name = $deleted->name." ".$deleted->last_name;
+        $deleted->delete();
+        toast('Sukses menghapus profil '.$name, 'success');
+        return redirect('/user/manage-profile');
+    }
+
+    public function find(Request $request) {
+        $id = Auth::user()->id;
+        $items = Transaction::where([
+            ['user_id', '=', $id],
+            ['created_at', '<>', $request->end],
+        ])->get();
+        $name = Auth::user()->name . " " . Auth::user()->last_name;
+        return view('user/order-hist', ['name' => $name, 'items' => $items]);
     }
 }

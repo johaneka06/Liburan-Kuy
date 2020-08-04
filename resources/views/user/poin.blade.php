@@ -6,8 +6,8 @@
 
 @section('content')
 <div class="mt-4">
-  <h1>Title Goes Here</h1>
-  <p>Content goes here</p>
+  <h1>Poin Liburan</h1>
+  <p>Nikmati berbagai keuntungan dengan menggunakan poin liburanmu.</p>
 </div>
 
 <script type="text/javascript">

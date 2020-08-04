@@ -9,7 +9,7 @@
         <a href="{{ url('user/profile') }}" class="list-group-item list-group-item-action bg-light" id="acc">Akun</a>
         <a href="{{ url('user/history') }}" class="list-group-item list-group-item-action bg-light" id="ordr">Order History</a>
         <a href="{{ url('user/point') }}" class="list-group-item list-group-item-action bg-light" id="point">Poin Liburan</a>
-        <a href="{{ url('user/profile-list') }}" class="list-group-item list-group-item-action bg-light" id="profile">Profile Management</a>
+        <a href="{{ url('/user/manage-profile') }}" class="list-group-item list-group-item-action bg-light" id="profile">Profile Management</a>
         <a href="{{ url('/logout') }}" class="list-group-item list-group-item-action bg-light" id="profile">Keluar</a>
       </div>
     </div>

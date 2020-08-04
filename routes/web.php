@@ -30,6 +30,14 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/user/profile/settings/phoneNo', 'ProfileController@phoneNoChanges') -> name('putPhoneNo');
     Route::post('/user/profile/settings/password', 'ProfileController@passwordChanges') -> name('putPassword');
     Route::post('/user/profile/settings/data', 'ProfileController@dataChanges') -> name('putData');
+    Route::get('/user/manage-profile', 'ProfileController@retrieveProfile');
+    Route::get('/user/manage-profile/{id}', 'ProfileController@getProfile') -> name('readProfile');
+    Route::post('/user/manage-profile/{id}/success', 'ProfileController@updateProfile') -> name('putProfileUpdate');
+    Route::post('/user/manage-profile/profile', 'ProfileController@addProfile') -> name('postProfile');
+    Route::get('/user/manage-profile/delete/{id}', 'ProfileController@getProfileData') -> name('fetchProfile');
+    Route::post('/user/manage-profile/delete/{id}/success', 'ProfileController@deleteProfile') -> name('deleteProfile');
+    Route::get('/user/history/logs', 'ProfileController@find') -> name('findLogs');
+    Route::get('/user/history/logs/detail/order_id={id}', 'TransactionController@viewDetailTransaction') -> name('getLogs');
 });
 
 Route::post('/login', 'AuthController@postLogin') -> name('postLogin');

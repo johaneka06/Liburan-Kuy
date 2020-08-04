@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Ramsey\Uuid\Uuid;
 
 class AuthController extends Controller
 {
@@ -73,6 +74,15 @@ class AuthController extends Controller
         $user->password = bcrypt($request->password);
         $user->remember_token = Str::random(10);
         $user->save();
+
+        $profile = new \App\Profile_List;
+        $profile->id = Uuid::uuid4();
+        $profile->user_id = DB::table('users')->where('phone_no', '=', $request->nomorHp)->first()->id;
+        $profile->name = $request->fName;
+        $profile->last_name = $request->lName;
+        $profile->phone_no = $request->nomorHp;
+        $profile->email = $request->email;
+        $profile->save();
 
         Auth::attempt($request->only('email', 'password'));
         toast('Your account has been created successfully','success');
