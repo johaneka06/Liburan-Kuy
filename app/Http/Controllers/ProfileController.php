@@ -27,9 +27,12 @@ class ProfileController extends Controller
     public function order()
     {
         $id = Auth::user()->id;
+        $date = date('Y-m-d', strtotime('-30 days'));
+        $today = Carbon::parse(Date::today())->format('Y-m-d');
         $items = Transaction::where([
             ['user_id', '=', $id],
-            ['dep_date', '<>', Date::today()],
+            ['dep_date', '<=', $today],
+            ['dep_date', '>=', $date]
         ])->get();
         $name = Auth::user()->name . " " . Auth::user()->last_name;
         return view('user/order-hist', ['name' => $name, 'items' => $items]);
@@ -161,9 +164,12 @@ class ProfileController extends Controller
 
     public function find(Request $request) {
         $id = Auth::user()->id;
+        $start = Carbon::parse($request->start)->format('Y-m-d');
+        $end = Carbon::parse($request->end)->format('Y-m-d');
         $items = Transaction::where([
             ['user_id', '=', $id],
-            ['created_at', '<>', $request->end],
+            ['dep_date', '>=', $start],
+            ['dep_date', '<=', $end]
         ])->get();
         $name = Auth::user()->name . " " . Auth::user()->last_name;
         return view('user/order-hist', ['name' => $name, 'items' => $items]);

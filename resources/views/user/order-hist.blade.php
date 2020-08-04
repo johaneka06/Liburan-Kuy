@@ -11,8 +11,8 @@
     <form action=" {{ route('findLogs') }} " method="GET" class="form-inline mb-3">
       <label class="my-1 mr-2" for="picker">Tampilkan data dari: </label>
       <select class="custom-select my-1 mr-sm-2" id="picker">
-        <option value="30" selected>30 hari yang lalu</option>
-        <option value="90">90 hari yang lalu</option>
+        <option value="30" id="30" selected>30 hari yang lalu</option>
+        <option value="90" id="90">90 hari yang lalu</option>
         <option value="0">Custom</option>
       </select>
       <div id="custom" class="row mr-3 ml-3">
@@ -27,7 +27,9 @@
       </div>
       <button type="submit" class="btn btn-primary my-1">Submit</button>
     </form>
-
+    @if($items->isEmpty())
+      <h2>Tidak ada history</h2>
+    @endif
     <div class="table">
       <table class="table">
         @foreach($items as $item)
