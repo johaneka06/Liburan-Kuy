@@ -9,6 +9,15 @@
   <div class="shadow">
     <div class="card">
       <div class="card-body">
+        @if($errors->any())
+        <div class="alert alert-danger">
+          <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+        @endif
         <h5 class="card-title mb-3">Register</h5>
         <h6 class="card-subtitle mb-4">Daftar dan rasakan kemudahannya.</h6>
         <form action="{{ route('postRegister') }}" method="POST">

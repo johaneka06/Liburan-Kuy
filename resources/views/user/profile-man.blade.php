@@ -13,6 +13,17 @@
       <a href="#" data-toggle="modal" data-target="#insertProfile" class="btn btn-primary float-right">Tambah</a>
     </div>
     <div class="card-body">
+    <!-- If there's error while validation -->
+    @if ($errors->any())
+              <div class="alert alert-danger">
+                <ul>
+                  @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div><br />
+              @endif
+              <!-- End if validation -->
       <div class="border-bottom mb-2">
         <table class="table">
           <thead class="thead">
@@ -73,7 +84,7 @@
       </div>
     </div>
   </div>
-  
+
   <script type="text/javascript">
     var element = document.getElementById("profile");
     element.classList.remove("bg-light");

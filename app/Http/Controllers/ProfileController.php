@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -111,13 +112,13 @@ class ProfileController extends Controller
     {
         $user_id = Auth::User()->id;
         $profiles = Profile_List::where('user_id', '=', $user_id)->orderBy('created_at')->get();
-        return view('user/profile-man', ['name' => Auth::User()->name." ".Auth::User()->last_name, 'profiles' => $profiles]);
+        return view('user/profile-man', ['name' => Auth::User()->name . " " . Auth::User()->last_name, 'profiles' => $profiles]);
     }
 
     public function getProfile($id)
     {
         $profile = Profile_List::where('id', '=', $id)->first();
-        return view('user/profile-editor', ['name' => Auth::User()->name." ".Auth::User()->last_name, 'profile' => $profile]);
+        return view('user/profile-editor', ['name' => Auth::User()->name . " " . Auth::User()->last_name, 'profile' => $profile]);
     }
 
     public function updateProfile($id, Request $request)
@@ -133,8 +134,9 @@ class ProfileController extends Controller
         return redirect('/user/manage-profile');
     }
 
-    public function addProfile(Request $request)
+    public function addProfile(Profile $request)
     {
+        $validated = $request->validated();
         $newProfile = new Profile_List;
         $newProfile->id = Uuid::uuid4();
         $newProfile->user_id = Auth::user()->id;
@@ -143,26 +145,32 @@ class ProfileController extends Controller
         $newProfile->phone_no = $request->phone;
         $newProfile->email = $request->email;
         $newProfile->save();
-        Alert::success('Sukses', 'Sukses menambahkan profil baru: '.$newProfile->name." ".$newProfile->last_name);
+        Alert::success('Sukses', 'Sukses menambahkan profil baru: ' . $newProfile->name . " " . $newProfile->last_name);
         return redirect('/user/manage-profile');
     }
 
     public function getProfileData($id)
     {
         $deleted = Profile_List::where('id', '=', $id)->first();
-        return view('user/delete-profile', ['name' => Auth::user()->name." ".Auth::user()->last_name, 'deleted' => $deleted]);
+        return view('user/delete-profile', ['name' => Auth::user()->name . " " . Auth::user()->last_name, 'deleted' => $deleted]);
     }
 
     public function deleteProfile($id)
     {
         $deleted = Profile_List::where('id', '=', $id)->first();
-        $name = $deleted->name." ".$deleted->last_name;
-        $deleted->delete();
-        toast('Sukses menghapus profil '.$name, 'success');
+        if (Auth::user()->name != $deleted->name && Auth::user()->last_name != $deleted->last_name) {
+            $name = $deleted->name . " " . $deleted->last_name;
+            $deleted->delete();
+            toast('Sukses menghapus profil ' . $name, 'success');
+        } else {
+            Alert::error('Cannot delete', 'Tidak dapat menghapus profil sendiri');
+        }
+
         return redirect('/user/manage-profile');
     }
 
-    public function find(Request $request) {
+    public function find(Request $request)
+    {
         $id = Auth::user()->id;
         $start = Carbon::parse($request->start)->format('Y-m-d');
         $end = Carbon::parse($request->end)->format('Y-m-d');

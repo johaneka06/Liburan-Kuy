@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Register;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -52,8 +53,9 @@ class AuthController extends Controller
         return redirect('/login');
     }
 
-    public function postRegister(Request $request)
+    public function postRegister(Register $request)
     {
+        $validatedData = $request->validated();        
 
         if(DB::table('users')->where('email', '=', $request->email)->exists())
         {
