@@ -37,7 +37,7 @@
           <h6>{{$item->airline}}</h6>
           <div class="row mt-3">
             <div class="col-sm-3">
-              Departure time
+              {{$departure->schedule}} WIB
               <br>
               {{$departure->city}}
             </div>
@@ -48,7 +48,7 @@
               </svg>
             </div>
             <div class="col-sm-3">
-              Arrival time
+              {{$arrival->schedule}} WIB
               <br>
               {{$arrival->city}}
             </div>
@@ -68,7 +68,12 @@
 
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
-            Item1
+            <div class="container">
+              @foreach(array_combine($data->passengersFName, $data->passengerLName) as $fname=>$lname)
+              <h5>{{$loop->iteration.". ".$fname." ".$lname}}</h5>
+              @endforeach
+            </div>
+
           </div>
         </div>
       </div>

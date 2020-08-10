@@ -9,6 +9,23 @@ use stdClass;
 
 class TransactionController extends Controller
 {
+
+    private function GenerateTime($hour, $min)
+    {
+        $time = "";
+        if($hour < 10){
+            $time .= 0;
+        }
+
+        $time .= $hour.":";
+        if($min < 10){
+            $time .= 0;
+        }
+
+        $time .= $min;
+        return $time;
+    }
+
     public function viewDetailTransaction($id)
     {
         $name = Auth::user()->name . " " . Auth::user()->last_name;
@@ -38,6 +55,12 @@ class TransactionController extends Controller
             if ($departure->city != "" && $arrival->city != "") break;
         }
 
-        return view('user/order-detail', ['name' => $name, 'item' => $transaction, 'departure' => $departure, 'arrival' => $arrival]);
+        $api = new APIController();
+        $data = $api->RetrieveFlightData($transaction->booking_code, $transaction->last_name);
+        $flight = $api->RetrieveFlightInfo($data->flightNo);
+        $departure->schedule = $this->GenerateTime($flight->departureSchedule->hour, $flight->departureSchedule->min);
+        $arrival->schedule = $this->GenerateTime($flight->arrivalSchedule->hour, $flight->arrivalSchedule->min);
+
+        return view('user/order-detail', ['name' => $name, 'item' => $transaction, 'departure' => $departure, 'arrival' => $arrival, 'data' => $data]);
     }
 }

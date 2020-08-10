@@ -18,6 +18,7 @@ class Transactions extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('booking_code', 6);
+            $table->string('last_name');
             $table->string('airline', 255);
             $table->string('flight_no', 5);
             $table->string('departure');

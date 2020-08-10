@@ -13,8 +13,9 @@
 </head>
 
 <body>
-  <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
       <a class="navbar-brand" href="{{ url('/') }}">Liburan Kuy!</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -27,16 +28,17 @@
         </div>
         <div class="ml-auto">
           @if(auth()->user() == null)
-            <a href="/login" class="btn btn-light">Login</a>
-            <a href="/daftar" class="btn btn-primary">Daftar</a>
+          <a href="/login" class="btn btn-light">Login</a>
+          <a href="/daftar" class="btn btn-primary">Daftar</a>
           @elseif(auth()->user() != null)
-            <a href="{{ url('/user/profile') }}" class="btn btn-light">Profile</a>
-            <a href="{{ url('/logout') }}" class="btn btn-primary">Logout</a>
+          <a href="{{ url('/user/profile') }}" class="btn btn-light">Profile</a>
+          <a href="{{ url('/logout') }}" class="btn btn-primary">Logout</a>
           @endif
         </div>
       </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
+
 
   @include('sweetalert::alert')
 
