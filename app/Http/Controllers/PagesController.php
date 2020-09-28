@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Airport;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PagesController extends Controller
@@ -44,6 +46,13 @@ class PagesController extends Controller
         $email = Auth::user()->email;
         $phone_no = Auth::user()->phone_no;
         return view('user/akun', ['name' => $name, 'email' => $email, 'phone_no' => $phone_no]);
+    }
+
+    public function autocomplete(Request $request)
+    {
+        $items = Airport::where('ICAO', 'LIKE', "%{$request->query('q')}%")->orWhere('name', 'LIKE', "%{$request->query('q')}%")->get();
+
+        return response()->json($items);
     }
 }
 

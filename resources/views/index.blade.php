@@ -48,11 +48,11 @@
         <div class="row mb-3">
           <div class="col-sm-3 border-right">
             <p style="color: gray;">Dari</p>
-            <input type="text" class="form-control" name="dep">
+            <input type="text" class="dari form-control" name="dep">
           </div>
           <div class="col-sm-3 border-right">
             <p style="color: gray;">Ke</p>
-            <input type="text" class="form-control" name="arr">
+            <input type="text" class="ke form-control" name="arr">
           </div>
           <div class="col-sm-2 border-right">
             <p style="color: gray;">Berangkat</p>
@@ -69,21 +69,71 @@
         </div>
         <button type="submit" class="btn btn-primary">Cari</button>
       </form>
-      
+
     </div>
   </div>
 
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
 <script type="text/javascript">
   function display() {
     var chckBox = document.getElementById("roundTripChck");
-    if(chckBox.checked == true) {
+    if (chckBox.checked == true) {
       document.getElementById("return").removeAttribute("disabled");
     } else {
       document.getElementById("return").setAttribute("disabled", "");
     }
   }
+
+  $.noConflict();
+
+  jQuery('.dari').select2({
+    placeholder: "Dari",
+    ajax: {
+      url: '/flight/autocomplete',
+      type: 'GET',
+      dataType: 'json',
+      delay: 250,
+      processResults: function(data) {
+        return {
+          results: jQuery.map(data, function(item){
+            console.log(item.name)
+            return {
+              text: item.name,
+              id: item.ICAO
+            }
+          })
+        };
+      }
+    },
+    cache: true
+  });
+
+  jQuery('.ke').select2({
+    placeholder: "Tujuan",
+    ajax: {
+      url: '/flight/autocomplete',
+      type: 'GET',
+      dataType: 'json',
+      delay: 250,
+      processResults: function(data) {
+        return {
+          results: jQuery.map(data, function(item){
+            console.log(item.name)
+            return {
+              text: item.name,
+              id: item.ICAO
+            }
+          })
+        };
+      }
+    },
+    cache: true
+  });
 </script>
 
 @endsection

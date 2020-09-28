@@ -19,6 +19,7 @@ Route::get('/daftar', 'AuthController@getRegister');
 Route::get('/pesawat', 'PagesController@plane');
 Route::get('/hotel', 'PagesController@hotel');
 Route::get('/kereta', 'PagesController@train');
+Route::get('/flight/autocomplete', 'PagesController@autocomplete') -> name('search');
 
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/logout', 'AuthController@logout');
